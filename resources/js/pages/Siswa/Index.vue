@@ -3,6 +3,7 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import { Pencil, Plus, Trash2 } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import Button from '@/components/ui/button/Button.vue';
+import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
 import {
     Dialog,
     DialogContent,
@@ -13,14 +14,15 @@ import {
 } from '@/components/ui/dialog';
 import Input from '@/components/ui/input/Input.vue';
 import { dashboard } from '@/routes';
-import guru from '@/routes/guru';
+import siswa from '@/routes/siswa';
 
-type Placement = { kelas: Option; tahun_ajaran: Option };
-type GuruItem = {
+type Placement = { kelas: { nama: string }; tahun_ajaran: { nama: string } };
+type SiswaItem = {
     id: number;
+    nis: string;
     nama: string;
-    mapel: string | null;
-    wali_kelas: Placement[];
+    status_aktif: boolean;
+    kelas_siswa: Placement[];
 };
 type Option = { id: number; nama: string };
 
@@ -28,41 +30,45 @@ defineOptions({
     layout: {
         breadcrumbs: [
             { title: 'Dashboard', href: dashboard() },
-            { title: 'Guru', href: guru.index() },
+            { title: 'Siswa', href: siswa.index() },
         ],
     },
 });
 
 const props = defineProps<{
-    guru: GuruItem[];
+    siswa: SiswaItem[];
     kelas: Option[];
     tahunAjaran: Option[];
 }>();
 const isOpen = ref(false);
 const editingId = ref<number | null>(null);
 const form = useForm({
+    nis: '',
     nama: '',
-    mapel: '',
+    status_aktif: true,
     kelas_id: '',
     tahun_ajaran_id: '',
 });
 const currentPlacement = computed(
-    () => props.guru.find((item) => item.id === editingId.value)?.wali_kelas[0],
+    () =>
+        props.siswa.find((item) => item.id === editingId.value)?.kelas_siswa[0],
 );
 
 const openCreate = () => {
     editingId.value = null;
     form.reset();
-    form.kelas_id = '';
-    form.tahun_ajaran_id = '';
+    form.status_aktif = true;
+    form.kelas_id = props.kelas[0]?.id.toString() ?? '';
+    form.tahun_ajaran_id = props.tahunAjaran[0]?.id.toString() ?? '';
     form.clearErrors();
     isOpen.value = true;
 };
 
-const openEdit = (item: GuruItem) => {
+const openEdit = (item: SiswaItem) => {
     editingId.value = item.id;
+    form.nis = item.nis;
     form.nama = item.nama;
-    form.mapel = item.mapel ?? '';
+    form.status_aktif = item.status_aktif;
     form.kelas_id = currentPlacement.value?.kelas
         ? (props.kelas
               .find(
@@ -84,47 +90,43 @@ const openEdit = (item: GuruItem) => {
 
 const submit = () => {
     const options = { onSuccess: () => (isOpen.value = false) };
-
     if (editingId.value) {
-        form.put(guru.update(editingId.value).url, options);
+        form.put(siswa.update(editingId.value).url, options);
         return;
     }
-
-    form.post(guru.store().url, options);
+    form.post(siswa.store().url, options);
 };
 
-const remove = (item: GuruItem) => {
-    if (confirm(`Hapus guru ${item.nama}?`)) {
-        router.delete(guru.destroy(item.id).url);
-    }
+const remove = (item: SiswaItem) => {
+    if (confirm(`Hapus siswa ${item.nama}?`))
+        router.delete(siswa.destroy(item.id).url);
 };
 </script>
 
 <template>
-    <Head title="Guru" />
-
+    <Head title="Siswa" />
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
         <div class="flex items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-semibold">Guru</h1>
+                <h1 class="text-2xl font-semibold">Siswa</h1>
                 <p class="mt-1 text-sm text-muted-foreground">
-                    Kelola data guru sekolah.
+                    Kelola data siswa dan kelasnya.
                 </p>
             </div>
             <Button @click="openCreate"><Plus class="size-4" /> Tambah</Button>
         </div>
-
         <div
-            class="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border"
+            class="overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border"
         >
-            <table class="w-full text-sm">
+            <table class="w-full min-w-175 text-sm">
                 <thead
                     class="border-b border-sidebar-border/70 text-left text-muted-foreground dark:border-sidebar-border"
                 >
                     <tr>
+                        <th class="px-5 py-3 font-medium">NIS</th>
                         <th class="px-5 py-3 font-medium">Nama</th>
-                        <th class="px-5 py-3 font-medium">Mata Pelajaran</th>
-                        <th class="px-5 py-3 font-medium">Wali Kelas</th>
+                        <th class="px-5 py-3 font-medium">Kelas</th>
+                        <th class="px-5 py-3 font-medium">Status</th>
                         <th class="w-28 px-5 py-3 text-right font-medium">
                             Aksi
                         </th>
@@ -132,16 +134,27 @@ const remove = (item: GuruItem) => {
                 </thead>
                 <tbody>
                     <tr
-                        v-for="item in props.guru"
+                        v-for="item in props.siswa"
                         :key="item.id"
                         class="border-b border-sidebar-border/70 last:border-0 dark:border-sidebar-border"
                     >
+                        <td class="px-5 py-4">{{ item.nis }}</td>
                         <td class="px-5 py-4 font-medium">{{ item.nama }}</td>
                         <td class="px-5 py-4 text-muted-foreground">
-                            {{ item.mapel || '-' }}
+                            {{ item.kelas_siswa[0]?.kelas.nama || '-' }}
                         </td>
-                        <td class="px-5 py-4 text-muted-foreground">
-                            {{ item.wali_kelas[0]?.kelas.nama || '-' }}
+                        <td class="px-5 py-4">
+                            <span
+                                :class="
+                                    item.status_aktif
+                                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                                        : 'bg-muted text-muted-foreground'
+                                "
+                                class="rounded-full px-2.5 py-1 text-xs font-medium"
+                                >{{
+                                    item.status_aktif ? 'Aktif' : 'Tidak aktif'
+                                }}</span
+                            >
                         </td>
                         <td class="px-5 py-4">
                             <div class="flex justify-end gap-1">
@@ -161,62 +174,61 @@ const remove = (item: GuruItem) => {
                             </div>
                         </td>
                     </tr>
-                    <tr v-if="props.guru.length === 0">
+                    <tr v-if="props.siswa.length === 0">
                         <td
-                            colspan="4"
+                            colspan="5"
                             class="px-5 py-12 text-center text-muted-foreground"
                         >
-                            Belum ada guru.
+                            Belum ada siswa.
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
     <Dialog v-model:open="isOpen"
         ><DialogContent
             ><DialogHeader
                 ><DialogTitle>{{
-                    editingId ? 'Ubah Guru' : 'Tambah Guru'
+                    editingId ? 'Ubah Siswa' : 'Tambah Siswa'
                 }}</DialogTitle
                 ><DialogDescription
-                    >Masukkan data guru.</DialogDescription
+                    >Masukkan data siswa dan penempatan
+                    kelas.</DialogDescription
                 ></DialogHeader
             >
-            <form class="space-y-5" @submit.prevent="submit">
+            <form class="space-y-4" @submit.prevent="submit">
                 <label class="block space-y-2 text-sm font-medium"
-                    >Nama<Input
-                        v-model="form.nama"
-                        placeholder="Nama guru"
-                        autofocus
-                    /><span v-if="form.errors.nama" class="text-destructive">{{
-                        form.errors.nama
-                    }}</span></label
+                    >NIS<Input v-model="form.nis" autofocus /><span
+                        v-if="form.errors.nis"
+                        class="text-destructive"
+                        >{{ form.errors.nis }}</span
+                    ></label
                 ><label class="block space-y-2 text-sm font-medium"
-                    >Mata Pelajaran<Input
-                        v-model="form.mapel"
-                        placeholder="Opsional"
-                    /><span v-if="form.errors.mapel" class="text-destructive">{{
-                        form.errors.mapel
-                    }}</span></label
+                    >Nama<Input v-model="form.nama" /><span
+                        v-if="form.errors.nama"
+                        class="text-destructive"
+                        >{{ form.errors.nama }}</span
+                    ></label
                 ><label class="block space-y-2 text-sm font-medium"
-                    >Wali Kelas<select
+                    >Kelas<select
                         v-model="form.kelas_id"
                         class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm"
                     >
-                        <option value="">Bukan wali kelas</option>
+                        <option value="" disabled>Pilih kelas</option>
                         <option
                             v-for="item in props.kelas"
                             :key="item.id"
                             :value="item.id"
                         >
                             {{ item.nama }}
-                        </option>
-                    </select></label
-                ><label
-                    v-if="form.kelas_id"
-                    class="block space-y-2 text-sm font-medium"
+                        </option></select
+                    ><span
+                        v-if="form.errors.kelas_id"
+                        class="text-destructive"
+                        >{{ form.errors.kelas_id }}</span
+                    ></label
+                ><label class="block space-y-2 text-sm font-medium"
                     >Tahun Ajaran<select
                         v-model="form.tahun_ajaran_id"
                         class="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm"
@@ -234,6 +246,13 @@ const remove = (item: GuruItem) => {
                         class="text-destructive"
                         >{{ form.errors.tahun_ajaran_id }}</span
                     ></label
+                ><label class="flex items-center gap-2 text-sm font-medium"
+                    ><Checkbox
+                        :model-value="form.status_aktif"
+                        @update:model-value="
+                            form.status_aktif = Boolean($event)
+                        "
+                    />Siswa aktif</label
                 ><DialogFooter
                     ><Button type="submit" :disabled="form.processing"
                         >Simpan</Button

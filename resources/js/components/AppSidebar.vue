@@ -6,6 +6,7 @@ import {
     FolderGit2,
     LayoutGrid,
     School,
+    UserRound,
     UsersRound,
 } from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -24,6 +25,7 @@ import {
 import { dashboard } from '@/routes';
 import guru from '@/routes/guru';
 import kelas from '@/routes/kelas';
+import siswa from '@/routes/siswa';
 import tahunAjaran from '@/routes/tahun-ajaran';
 import type { NavItem } from '@/types';
 
@@ -47,6 +49,11 @@ const mainNavItems: NavItem[] = [
         title: 'Guru',
         href: guru.index(),
         icon: UsersRound,
+    },
+    {
+        title: 'Siswa',
+        href: siswa.index(),
+        icon: UserRound,
     },
 ];
 
