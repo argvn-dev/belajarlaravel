@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import guru from '@/routes/guru';
+import jadwalPelajaran from '@/routes/jadwal-pelajaran';
 import kelas from '@/routes/kelas';
 import siswa from '@/routes/siswa';
 import tahunAjaran from '@/routes/tahun-ajaran';
@@ -54,6 +55,11 @@ const mainNavItems: NavItem[] = [
         title: 'Siswa',
         href: siswa.index(),
         icon: UserRound,
+    },
+    {
+        title: 'Jadwal Pelajaran',
+        href: jadwalPelajaran.index(),
+        icon: CalendarDays,
     },
 ];
 
