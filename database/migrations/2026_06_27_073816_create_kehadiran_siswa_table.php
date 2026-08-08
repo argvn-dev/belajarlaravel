@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kehadiran', function (Blueprint $table) {
+        Schema::create('kehadiran_siswa', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
-            $table->foreignId('jadwal_pelajaran_id');
+            $table->foreignId('kehadiran_id');
+            $table->foreignId('siswa_id');
+            $table->enum('status', ['Hadir', 'Sakit', 'Izin', 'Alpa'])->default('Hadir');
             $table->text('keterangan')->nullable();
-            $table->foreignId('dicatat_oleh');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kehadiran');
+        Schema::dropIfExists('kehadiran_siswa');
     }
 };
