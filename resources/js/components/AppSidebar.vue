@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import {
     BookOpen,
+    CalendarCheck,
     CalendarDays,
     FolderGit2,
     LayoutGrid,
@@ -25,6 +26,7 @@ import {
 import { dashboard } from '@/routes';
 import guru from '@/routes/guru';
 import jadwalPelajaran from '@/routes/jadwal-pelajaran';
+import kehadiran from '@/routes/kehadiran';
 import kelas from '@/routes/kelas';
 import siswa from '@/routes/siswa';
 import tahunAjaran from '@/routes/tahun-ajaran';
@@ -60,6 +62,11 @@ const mainNavItems: NavItem[] = [
         title: 'Jadwal Pelajaran',
         href: jadwalPelajaran.index(),
         icon: CalendarDays,
+    },
+    {
+        title: 'Kehadiran',
+        href: kehadiran.index(),
+        icon: CalendarCheck,
     },
 ];
 

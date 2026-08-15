@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\JadwalPelajaranController;
+use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAjaranController;
@@ -16,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('kelas', KelasController::class)->except(['create', 'show', 'edit']);
     Route::resource('tahun-ajaran', TahunAjaranController::class)->except(['create', 'show', 'edit']);
     Route::resource('jadwal-pelajaran', JadwalPelajaranController::class)->except(['create', 'show', 'edit']);
+    Route::resource('kehadiran', KehadiranController::class)->except(['create', 'store', 'show']);
 });
 
 require __DIR__.'/settings.php';
