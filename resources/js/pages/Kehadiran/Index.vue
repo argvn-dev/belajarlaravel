@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
-import { Pencil, Trash2 } from '@lucide/vue';
+import { Pencil, Plus, Trash2 } from '@lucide/vue';
 import Button from '@/components/ui/button/Button.vue';
 import { dashboard } from '@/routes';
 import kehadiranRoutes from '@/routes/kehadiran';
@@ -39,6 +39,13 @@ defineProps<{
     kehadiran: KehadiranItem[];
 }>();
 
+const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+const formatTanggal = (value: string): string => {
+    const date = new Date(value);
+
+    return `${date.getDate()} ${bulan[date.getMonth()]} ${date.getFullYear()}`;
+};
+
 const remove = (item: KehadiranItem) => {
     if (confirm(`Hapus catatan kehadiran tanggal ${item.tanggal}?`)) {
         router.delete(kehadiranRoutes.destroy(item.id).url);
@@ -50,9 +57,12 @@ const remove = (item: KehadiranItem) => {
     <Head title="Kehadiran" />
 
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Kehadiran</h1>
-            <p class="mt-1 text-sm text-muted-foreground">Daftar catatan kehadiran siswa per pertemuan.</p>
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-semibold">Kehadiran</h1>
+                <p class="mt-1 text-sm text-muted-foreground">Daftar catatan kehadiran siswa per pertemuan.</p>
+            </div>
+            <Button @click="router.visit(kehadiranRoutes.create().url)"><Plus class="size-4" /> Tambah</Button>
         </div>
 
         <div class="overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border">
@@ -72,18 +82,15 @@ const remove = (item: KehadiranItem) => {
                 </thead>
                 <tbody>
                     <tr v-for="item in kehadiran" :key="item.id" class="border-b border-sidebar-border/70 last:border-0 dark:border-sidebar-border">
-                        <td class="px-5 py-4 font-medium">{{ item.tanggal }}</td>
+                        <td class="px-5 py-4 font-medium">{{ formatTanggal(item.tanggal) }}</td>
                         <td class="px-5 py-4">
-                            <div>{{ item.jadwal_pelajaran.hari }}</div>
+                            <div>{{ item.jadwal_pelajaran.guru.mapel ?? '—' }}</div>
                             <div class="text-xs text-muted-foreground">
-                                {{ item.jadwal_pelajaran.jam_mulai.slice(0, 5) }} - {{ item.jadwal_pelajaran.jam_selesai.slice(0, 5) }}
+                                {{ item.jadwal_pelajaran.hari }} · {{ item.jadwal_pelajaran.jam_mulai.slice(0, 5) }} - {{ item.jadwal_pelajaran.jam_selesai.slice(0, 5) }}
                             </div>
                         </td>
                         <td class="px-5 py-4">{{ item.jadwal_pelajaran.kelas.nama }}</td>
-                        <td class="px-5 py-4">
-                            {{ item.jadwal_pelajaran.guru.nama }}
-                            <span v-if="item.jadwal_pelajaran.guru.mapel" class="text-xs text-muted-foreground">· {{ item.jadwal_pelajaran.guru.mapel }}</span>
-                        </td>
+                        <td class="px-5 py-4">{{ item.jadwal_pelajaran.guru.nama }}</td>
                         <td class="px-3 py-4 text-center">{{ item.jumlah_hadir }}</td>
                         <td class="px-3 py-4 text-center">{{ item.sakit }}</td>
                         <td class="px-3 py-4 text-center">{{ item.izin }}</td>

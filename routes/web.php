@@ -17,7 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('kelas', KelasController::class)->except(['create', 'show', 'edit']);
     Route::resource('tahun-ajaran', TahunAjaranController::class)->except(['create', 'show', 'edit']);
     Route::resource('jadwal-pelajaran', JadwalPelajaranController::class)->except(['create', 'show', 'edit']);
-    Route::resource('kehadiran', KehadiranController::class)->except(['create', 'store', 'show']);
+    Route::resource('kehadiran', KehadiranController::class)->except(['show']);
 });
 
 require __DIR__.'/settings.php';

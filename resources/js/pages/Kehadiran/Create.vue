@@ -12,18 +12,10 @@ type KelasOption = { id: number; nama: string; jurusan: string | null; tingkat: 
 type GuruOption = { id: number; nama: string; mapel: string | null };
 type JadwalOption = { id: number; hari: string; jam_mulai: string; jam_selesai: string; guru: GuruOption };
 type SiswaOption = { id: number; nis: string | null; nama: string };
-type KehadiranDefault = {
-    id: number;
-    tanggal: string;
-    keterangan: string | null;
-    kelas_id: number;
-    jadwal_pelajaran_id: number;
-};
 
 const props = defineProps<{
-    kehadiran: KehadiranDefault;
-    statuses: Record<number, string>;
     kelas: KelasOption[];
+    tahunAjaran: { id: number; nama: string } | null;
     jadwalPelajaran: JadwalOption[];
     siswa: SiswaOption[];
 }>();
@@ -38,6 +30,7 @@ defineOptions({
 });
 
 const statusList = ['Hadir', 'Sakit', 'Izin', 'Alpa'];
+const today = new Date().toISOString().slice(0, 10);
 
 const selectedHari = computed(() => {
     if (!form.tanggal) {
@@ -58,10 +51,10 @@ watch(selectedHari, () => {
 });
 
 const form = useForm({
-    tanggal: props.kehadiran.tanggal,
-    kelas_id: props.kehadiran.kelas_id,
-    jadwal_pelajaran_id: props.kehadiran.jadwal_pelajaran_id as number | string,
-    keterangan: props.kehadiran.keterangan ?? '',
+    tanggal: today,
+    kelas_id: '',
+    jadwal_pelajaran_id: '',
+    keterangan: '',
     statuses: [] as { siswa_id: number; status: string }[],
 });
 
@@ -71,7 +64,9 @@ watch(
     () => props.siswa,
     (list) => {
         for (const siswa of list) {
-            statuses[siswa.id] = props.statuses[siswa.id] ?? 'Hadir';
+            if (!(siswa.id in statuses)) {
+                statuses[siswa.id] = 'Hadir';
+            }
         }
     },
     { immediate: true },
@@ -85,7 +80,7 @@ const onKelasChange = () => {
     }
 
     router.get(
-        kehadiranRoutes.edit(props.kehadiran.id).url,
+        kehadiranRoutes.create().url,
         { kelas_id: form.kelas_id },
         { preserveState: true, replace: true, only: ['jadwalPelajaran', 'siswa'] },
     );
@@ -98,20 +93,23 @@ const submit = () => {
         siswa_id: siswa.id,
         status: statuses[siswa.id] ?? 'Hadir',
     }));
-    form.put(kehadiranRoutes.update(props.kehadiran.id).url);
+    form.post(kehadiranRoutes.store().url);
 };
 </script>
 
 <template>
-    <Head title="Ubah Kehadiran" />
+    <Head title="Tambah Kehadiran" />
 
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
         <div>
             <Button variant="ghost" size="sm" class="mb-2" @click="routerBack">
                 <ArrowLeft class="size-4" /> Kembali
             </Button>
-            <h1 class="text-2xl font-semibold">Ubah Kehadiran</h1>
-            <p class="mt-1 text-sm text-muted-foreground">Perbarui catatan kehadiran siswa untuk pertemuan ini.</p>
+            <h1 class="text-2xl font-semibold">Tambah Kehadiran</h1>
+            <p class="mt-1 text-sm text-muted-foreground">
+                Catat kehadiran siswa untuk satu pertemuan pelajaran.
+                <span v-if="props.tahunAjaran"> Tahun ajaran: {{ props.tahunAjaran.nama }}.</span>
+            </p>
         </div>
 
         <form class="space-y-6" @submit.prevent="submit">
@@ -129,6 +127,7 @@ const submit = () => {
                             {{ item.nama }}<span v-if="item.jurusan"> - {{ item.jurusan }}</span>
                         </option>
                     </select>
+                    <span v-if="form.errors.kelas_id" class="text-sm text-destructive">{{ form.errors.kelas_id }}</span>
                 </div>
                 <div class="space-y-2">
                     <Label for="jadwal_pelajaran_id">Jadwal Pelajaran</Label>

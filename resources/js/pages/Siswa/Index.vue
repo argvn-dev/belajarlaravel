@@ -90,16 +90,20 @@ const openEdit = (item: SiswaItem) => {
 
 const submit = () => {
     const options = { onSuccess: () => (isOpen.value = false) };
+
     if (editingId.value) {
         form.put(siswa.update(editingId.value).url, options);
+
         return;
     }
+
     form.post(siswa.store().url, options);
 };
 
 const remove = (item: SiswaItem) => {
-    if (confirm(`Hapus siswa ${item.nama}?`))
-        router.delete(siswa.destroy(item.id).url);
+    if (confirm(`Hapus siswa ${item.nama}?`)) {
+router.delete(siswa.destroy(item.id).url);
+}
 };
 </script>
 

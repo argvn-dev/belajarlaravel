@@ -84,6 +84,7 @@ const submit = () => {
 
     if (editingId.value) {
         form.put(jadwalPelajaran.update(editingId.value).url, options);
+
         return;
     }
 

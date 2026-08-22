@@ -87,6 +87,7 @@ const submit = () => {
 
     if (editingId.value) {
         form.put(guru.update(editingId.value).url, options);
+
         return;
     }
 
