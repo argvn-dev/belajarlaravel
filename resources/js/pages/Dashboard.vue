@@ -34,53 +34,53 @@ defineOptions({
     <Head title="Dashboard" />
 
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-        <div class="grid gap-4 md:grid-cols-3">
+        <div class="grid grid-cols-3 gap-4">
             <div
-                class="rounded-2xl border border-sidebar-border/70 bg-background p-5 shadow-sm dark:border-sidebar-border"
+                class="rounded-2xl border border-sidebar-border/70 bg-background p-3 shadow-sm dark:border-sidebar-border"
             >
-                <div class="flex items-start justify-between">
+                <div class="flex items-start justify-between gap-2">
                     <div>
-                        <p class="text-sm font-medium text-muted-foreground">
+                        <p class="text-xs font-medium text-muted-foreground">
                             Jumlah Siswa
                         </p>
-                        <p class="mt-3 text-3xl font-bold tracking-tight">0</p>
+                        <p class="mt-1 text-xl font-bold tracking-tight">0</p>
                     </div>
                     <div
-                        class="rounded-xl bg-blue-500/10 p-3 text-blue-600 dark:text-blue-400"
+                        class="rounded-xl bg-blue-500/10 p-2 text-blue-600 dark:text-blue-400"
                     >
                         <Users class="size-6" aria-hidden="true" />
                     </div>
                 </div>
             </div>
             <div
-                class="rounded-2xl border border-sidebar-border/70 bg-background p-5 shadow-sm dark:border-sidebar-border"
+                class="rounded-2xl border border-sidebar-border/70 bg-background p-3 shadow-sm dark:border-sidebar-border"
             >
-                <div class="flex items-start justify-between">
+                <div class="flex items-start justify-between gap-2">
                     <div>
-                        <p class="text-sm font-medium text-muted-foreground">
+                        <p class="text-xs font-medium text-muted-foreground">
                             Jumlah Guru
                         </p>
-                        <p class="mt-3 text-3xl font-bold tracking-tight">0</p>
+                        <p class="mt-1 text-xl font-bold tracking-tight">0</p>
                     </div>
                     <div
-                        class="rounded-xl bg-amber-500/10 p-3 text-amber-600 dark:text-amber-400"
+                        class="rounded-xl bg-amber-500/10 p-2 text-amber-600 dark:text-amber-400"
                     >
                         <GraduationCap class="size-6" aria-hidden="true" />
                     </div>
                 </div>
             </div>
             <div
-                class="rounded-2xl border border-sidebar-border/70 bg-background p-5 shadow-sm dark:border-sidebar-border"
+                class="rounded-2xl border border-sidebar-border/70 bg-background p-3 shadow-sm dark:border-sidebar-border"
             >
-                <div class="flex items-start justify-between">
+                <div class="flex items-start justify-between gap-2">
                     <div>
-                        <p class="text-sm font-medium text-muted-foreground">
+                        <p class="text-xs font-medium text-muted-foreground">
                             Jumlah Kelas
                         </p>
-                        <p class="mt-3 text-3xl font-bold tracking-tight">0</p>
+                        <p class="mt-1 text-xl font-bold tracking-tight">0</p>
                     </div>
                     <div
-                        class="rounded-xl bg-emerald-500/10 p-3 text-emerald-600 dark:text-emerald-400"
+                        class="rounded-xl bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400"
                     >
                         <School class="size-6" aria-hidden="true" />
                     </div>

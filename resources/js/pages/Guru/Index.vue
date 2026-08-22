@@ -116,7 +116,7 @@ const remove = (item: GuruItem) => {
         </div>
 
         <div
-            class="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border"
+            class="hidden overflow-hidden rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border md:block"
         >
             <table class="w-full text-sm">
                 <thead
@@ -172,6 +172,49 @@ const remove = (item: GuruItem) => {
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="space-y-3 md:hidden">
+            <div
+                v-for="item in props.guru"
+                :key="item.id"
+                class="rounded-xl border border-sidebar-border/70 bg-background p-4 shadow-sm dark:border-sidebar-border"
+            >
+                <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                        <p class="truncate font-medium">{{ item.nama }}</p>
+                        <p class="mt-1 text-xs text-muted-foreground">
+                            {{ item.mapel || '-' }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">
+                            Wali:
+                            {{ item.wali_kelas[0]?.kelas.nama || '-' }}
+                        </p>
+                    </div>
+                    <div class="flex shrink-0 gap-1">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            :aria-label="`Ubah ${item.nama}`"
+                            @click="openEdit(item)"
+                            ><Pencil class="size-4"
+                        /></Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            :aria-label="`Hapus ${item.nama}`"
+                            @click="remove(item)"
+                            ><Trash2 class="size-4 text-destructive"
+                        /></Button>
+                    </div>
+                </div>
+            </div>
+            <p
+                v-if="props.guru.length === 0"
+                class="py-12 text-center text-sm text-muted-foreground"
+            >
+                Belum ada guru.
+            </p>
         </div>
     </div>
 

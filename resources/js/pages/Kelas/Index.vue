@@ -94,8 +94,12 @@ const remove = (item: KelasItem) => {
                 >
                     <tr>
                         <th class="px-5 py-3 font-medium">Nama</th>
-                        <th class="px-5 py-3 font-medium">Jurusan</th>
-                        <th class="px-5 py-3 font-medium">Tingkat</th>
+                        <th class="hidden px-5 py-3 font-medium md:table-cell">
+                            Jurusan
+                        </th>
+                        <th class="hidden px-5 py-3 font-medium md:table-cell">
+                            Tingkat
+                        </th>
                         <th class="w-28 px-5 py-3 text-right font-medium">
                             Aksi
                         </th>
@@ -108,8 +112,12 @@ const remove = (item: KelasItem) => {
                         class="border-b border-sidebar-border/70 last:border-0 dark:border-sidebar-border"
                     >
                         <td class="px-5 py-4 font-medium">{{ item.nama }}</td>
-                        <td class="px-5 py-4">{{ item.jurusan }}</td>
-                        <td class="px-5 py-4">{{ item.tingkat }}</td>
+                        <td class="hidden px-5 py-4 md:table-cell">
+                            {{ item.jurusan }}
+                        </td>
+                        <td class="hidden px-5 py-4 md:table-cell">
+                            {{ item.tingkat }}
+                        </td>
                         <td class="px-5 py-4">
                             <div class="flex justify-end gap-1">
                                 <Button

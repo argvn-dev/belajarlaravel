@@ -65,7 +65,7 @@ const remove = (item: KehadiranItem) => {
             <Button @click="router.visit(kehadiranRoutes.create().url)"><Plus class="size-4" /> Tambah</Button>
         </div>
 
-        <div class="overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border">
+        <div class="hidden overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border md:block">
             <table class="w-full min-w-230 text-sm">
                 <thead class="border-b border-sidebar-border/70 text-left text-muted-foreground dark:border-sidebar-border">
                     <tr>
@@ -107,6 +107,55 @@ const remove = (item: KehadiranItem) => {
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="space-y-3 md:hidden">
+            <div
+                v-for="item in kehadiran"
+                :key="item.id"
+                class="rounded-xl border border-sidebar-border/70 bg-background p-4 shadow-sm dark:border-sidebar-border"
+            >
+                <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                        <p class="font-medium">{{ formatTanggal(item.tanggal) }}</p>
+                        <p class="mt-1 text-xs text-muted-foreground">
+                            {{ item.jadwal_pelajaran.guru.mapel ?? '—' }} ·
+                            {{ item.jadwal_pelajaran.hari }} · {{ item.jadwal_pelajaran.jam_mulai.slice(0, 5) }} - {{ item.jadwal_pelajaran.jam_selesai.slice(0, 5) }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">
+                            {{ item.jadwal_pelajaran.kelas.nama }} · {{ item.jadwal_pelajaran.guru.nama }}
+                        </p>
+                    </div>
+                    <div class="flex shrink-0 gap-1">
+                        <Button variant="ghost" size="icon" :aria-label="`Ubah kehadiran ${item.tanggal}`" @click="router.visit(kehadiranRoutes.edit(item.id).url)"><Pencil class="size-4" /></Button>
+                        <Button variant="ghost" size="icon" :aria-label="`Hapus kehadiran ${item.tanggal}`" @click="remove(item)"><Trash2 class="size-4 text-destructive" /></Button>
+                    </div>
+                </div>
+                <div class="mt-3 grid grid-cols-4 gap-2 text-center">
+                    <div class="rounded-lg bg-muted/50 py-2">
+                        <p class="text-sm font-semibold">{{ item.jumlah_hadir }}</p>
+                        <p class="text-[10px] text-muted-foreground">Hadir</p>
+                    </div>
+                    <div class="rounded-lg bg-muted/50 py-2">
+                        <p class="text-sm font-semibold">{{ item.sakit }}</p>
+                        <p class="text-[10px] text-muted-foreground">Sakit</p>
+                    </div>
+                    <div class="rounded-lg bg-muted/50 py-2">
+                        <p class="text-sm font-semibold">{{ item.izin }}</p>
+                        <p class="text-[10px] text-muted-foreground">Izin</p>
+                    </div>
+                    <div class="rounded-lg bg-muted/50 py-2">
+                        <p class="text-sm font-semibold">{{ item.alpa }}</p>
+                        <p class="text-[10px] text-muted-foreground">Alpa</p>
+                    </div>
+                </div>
+            </div>
+            <p
+                v-if="kehadiran.length === 0"
+                class="py-12 text-center text-sm text-muted-foreground"
+            >
+                Belum ada catatan kehadiran.
+            </p>
         </div>
     </div>
 </template>

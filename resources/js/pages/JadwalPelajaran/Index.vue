@@ -110,7 +110,7 @@ const remove = (item: JadwalItem) => {
             <Button @click="openCreate"><Plus class="size-4" /> Tambah</Button>
         </div>
 
-        <div class="overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border">
+        <div class="hidden overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border md:block">
             <table class="w-full min-w-225 text-sm">
                 <thead class="border-b border-sidebar-border/70 text-left text-muted-foreground dark:border-sidebar-border">
                     <tr>
@@ -141,6 +141,42 @@ const remove = (item: JadwalItem) => {
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="space-y-3 md:hidden">
+            <div
+                v-for="item in props.jadwalPelajaran"
+                :key="item.id"
+                class="rounded-xl border border-sidebar-border/70 bg-background p-4 shadow-sm dark:border-sidebar-border"
+            >
+                <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                        <p class="font-medium">{{ item.hari }}</p>
+                        <p class="mt-1 text-xs text-muted-foreground">
+                            {{ item.jam_mulai.slice(0, 5) }} - {{ item.jam_selesai.slice(0, 5) }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">
+                            Kelas: {{ item.kelas.nama }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">
+                            Guru: {{ item.guru.nama }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">
+                            {{ item.tahun_ajaran.nama }}
+                        </p>
+                    </div>
+                    <div class="flex shrink-0 gap-1">
+                        <Button variant="ghost" size="icon" :aria-label="`Ubah jadwal ${item.hari}`" @click="openEdit(item)"><Pencil class="size-4" /></Button>
+                        <Button variant="ghost" size="icon" :aria-label="`Hapus jadwal ${item.hari}`" @click="remove(item)"><Trash2 class="size-4 text-destructive" /></Button>
+                    </div>
+                </div>
+            </div>
+            <p
+                v-if="props.jadwalPelajaran.length === 0"
+                class="py-12 text-center text-sm text-muted-foreground"
+            >
+                Belum ada jadwal pelajaran.
+            </p>
         </div>
     </div>
 

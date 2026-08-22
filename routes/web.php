@@ -12,6 +12,7 @@ Route::inertia('/', 'Welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::inertia('pengaturan', 'Settings/Index')->name('pengaturan');
     Route::resource('siswa', SiswaController::class)->except(['create', 'show', 'edit']);
     Route::resource('guru', GuruController::class)->except(['create', 'show', 'edit']);
     Route::resource('kelas', KelasController::class)->except(['create', 'show', 'edit']);

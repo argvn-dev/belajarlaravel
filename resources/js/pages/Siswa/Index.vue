@@ -120,7 +120,7 @@ router.delete(siswa.destroy(item.id).url);
             <Button @click="openCreate"><Plus class="size-4" /> Tambah</Button>
         </div>
         <div
-            class="overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border"
+            class="hidden overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border md:block"
         >
             <table class="w-full min-w-175 text-sm">
                 <thead
@@ -188,6 +188,61 @@ router.delete(siswa.destroy(item.id).url);
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="space-y-3 md:hidden">
+            <div
+                v-for="item in props.siswa"
+                :key="item.id"
+                class="rounded-xl border border-sidebar-border/70 bg-background p-4 shadow-sm dark:border-sidebar-border"
+            >
+                <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                        <p class="truncate font-medium">{{ item.nama }}</p>
+                        <p class="mt-1 text-xs text-muted-foreground">
+                            NIS: {{ item.nis }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-muted-foreground">
+                            Kelas: {{ item.kelas_siswa[0]?.kelas.nama || '-' }}
+                        </p>
+                    </div>
+                    <div class="flex shrink-0 flex-col items-end gap-2">
+                        <span
+                            :class="
+                                item.status_aktif
+                                    ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                                    : 'bg-muted text-muted-foreground'
+                            "
+                            class="rounded-full px-2.5 py-1 text-xs font-medium"
+                            >{{
+                                item.status_aktif ? 'Aktif' : 'Tidak aktif'
+                            }}</span
+                        >
+                        <div class="flex gap-1">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                :aria-label="`Ubah ${item.nama}`"
+                                @click="openEdit(item)"
+                                ><Pencil class="size-4"
+                            /></Button>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                :aria-label="`Hapus ${item.nama}`"
+                                @click="remove(item)"
+                                ><Trash2 class="size-4 text-destructive"
+                            /></Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p
+                v-if="props.siswa.length === 0"
+                class="py-12 text-center text-sm text-muted-foreground"
+            >
+                Belum ada siswa.
+            </p>
         </div>
     </div>
     <Dialog v-model:open="isOpen"
