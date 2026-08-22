@@ -41,13 +41,6 @@ const menus = [
     <Head title="Pengaturan" />
 
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Pengaturan</h1>
-            <p class="mt-1 text-sm text-muted-foreground">
-                Kelola data master sekolah.
-            </p>
-        </div>
-
         <div class="grid gap-4">
             <Link
                 v-for="menu in menus"

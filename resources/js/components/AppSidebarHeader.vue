@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { router, usePage } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import { ArrowLeft } from '@lucide/vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import {
@@ -46,7 +46,7 @@ const isDashboard = computed(
                 type="button"
                 class="-ml-1 flex size-9 items-center justify-center rounded-md hover:bg-accent md:hidden"
                 :aria-label="'Kembali'"
-                @click="router.back()"
+                @click="window.history.back()"
             >
                 <ArrowLeft class="h-5 w-5" />
             </button>
