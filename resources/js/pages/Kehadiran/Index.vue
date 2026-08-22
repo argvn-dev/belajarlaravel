@@ -57,13 +57,21 @@ const remove = (item: KehadiranItem) => {
     <Head title="Kehadiran" />
 
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-        <div class="flex items-center justify-between gap-4">
+        <div class="hidden items-center justify-between gap-4 md:flex">
             <div>
                 <h1 class="text-2xl font-semibold">Kehadiran</h1>
                 <p class="mt-1 text-sm text-muted-foreground">Daftar catatan kehadiran siswa per pertemuan.</p>
             </div>
             <Button @click="router.visit(kehadiranRoutes.create().url)"><Plus class="size-4" /> Tambah</Button>
         </div>
+
+        <Button
+            class="fixed bottom-20 right-4 z-50 size-14 rounded-full shadow-lg md:hidden"
+            :aria-label="'Tambah kehadiran'"
+            @click="router.visit(kehadiranRoutes.create().url)"
+        >
+            <Plus class="size-6" />
+        </Button>
 
         <div class="hidden overflow-x-auto rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border md:block">
             <table class="w-full min-w-230 text-sm">

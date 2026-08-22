@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import {
     CalendarCheck,
     GraduationCap,
@@ -18,9 +18,9 @@ const currentPath = computed(() => page.url.split('?')[0]);
 
 const items = [
     { label: 'Home', icon: Home, href: dashboard().url },
-    { label: 'Guru', icon: Users, href: guru.index().url },
     { label: 'Siswa', icon: GraduationCap, href: siswa.index().url },
     { label: 'Kehadiran', icon: CalendarCheck, href: kehadiran.index().url },
+    { label: 'Guru', icon: Users, href: guru.index().url },
     { label: 'Pengaturan', icon: Settings, href: pengaturan().url },
 ];
 
@@ -33,7 +33,7 @@ const isActive = (href: string) => currentPath.value === href;
     >
         <ul class="flex items-stretch justify-around">
             <li v-for="item in items" :key="item.href">
-                <a
+                <Link
                     :href="item.href"
                     class="flex flex-col items-center gap-1 px-2 py-2.5 text-[10px] font-medium transition-colors"
                     :class="
@@ -52,7 +52,7 @@ const isActive = (href: string) => currentPath.value === href;
                         "
                     />
                     {{ item.label }}
-                </a>
+                </Link>
             </li>
         </ul>
     </nav>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { CalendarClock, School, CalendarDays } from '@lucide/vue';
 import { dashboard, pengaturan } from '@/routes';
 import kelas from '@/routes/kelas';
@@ -49,7 +49,7 @@ const menus = [
         </div>
 
         <div class="grid gap-4">
-            <a
+            <Link
                 v-for="menu in menus"
                 :key="menu.href"
                 :href="menu.href"
@@ -66,7 +66,7 @@ const menus = [
                         {{ menu.description }}
                     </p>
                 </div>
-            </a>
+            </Link>
         </div>
     </div>
 </template>

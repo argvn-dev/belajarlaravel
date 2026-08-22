@@ -75,7 +75,7 @@ const remove = (item: KelasItem) => {
     <Head title="Kelas" />
 
     <div class="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-        <div class="flex items-center justify-between gap-4">
+        <div class="hidden items-center justify-between gap-4 md:flex">
             <div>
                 <h1 class="text-2xl font-semibold">Kelas</h1>
                 <p class="mt-1 text-sm text-muted-foreground">
@@ -84,6 +84,14 @@ const remove = (item: KelasItem) => {
             </div>
             <Button @click="openCreate"><Plus class="size-4" /> Tambah</Button>
         </div>
+
+        <Button
+            class="fixed bottom-20 right-4 z-50 size-14 rounded-full shadow-lg md:hidden"
+            :aria-label="'Tambah kelas'"
+            @click="openCreate"
+        >
+            <Plus class="size-6" />
+        </Button>
 
         <div
             class="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border"
